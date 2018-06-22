@@ -82,42 +82,48 @@ const store = createStore(initialState, history);
 // ========================================================
 const MOUNT_NODE = document.getElementById('root');
 
-const render = () => {
-  ReactDOM.render(
+export const App = () => (
     <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route
-              path="/account"
-              component={withRouter(userIsNotAuthenticatedRedir(AuthContainer))}
-            />
-            <Route path="/streams" component={withRouter(DiscoverScreen)} />
-            <Route path="/purchases" component={withRouter(PurchasesScreen)} />
-            <Route path="/listings" component={withRouter(ListingsScreen)} />
-            <Route path="/enlist" component={withRouter(EnlistScreen)} />
-            <Route path="/datasets" component={withRouter(DatasetsScreen)} />
-            <Route
-              path="/wallet"
-              component={withRouter(userIsAuthenticatedRedir(WalletScreen))}
-            />
-            <Route
-              path="/stream/:key"
-              component={withRouter(StreamDetailsScreen)}
-            />
-            <Route
-              path="/dataset/:key"
-              component={withRouter(DatasetsDetailsScreen)}
-            />
-            <Route
-              path="/unsubscribed"
-              component={withRouter(UnsubscribedScreen)}
-            />
-            <Route path="/" component={LandingScreen} />
-          </Switch>
-        </ConnectedRouter>
-      </Provider>
-    </ThemeProvider>,
+        <Provider store={store}>
+            <ConnectedRouter history={history}>
+                <Switch>
+                    <Route
+                        path="/account"
+                        component={withRouter(userIsNotAuthenticatedRedir(AuthContainer))}
+                    />
+                    <Route path="/streams" component={withRouter(DiscoverScreen)} />
+                    <Route path="/purchases" component={withRouter(PurchasesScreen)} />
+                    <Route path="/listings" component={withRouter(ListingsScreen)} />
+                    <Route path="/enlist" component={withRouter(EnlistScreen)} />
+                    <Route path="/datasets" component={withRouter(DatasetsScreen)} />
+                    <Route
+                        path="/wallet"
+                        component={withRouter(userIsAuthenticatedRedir(WalletScreen))}
+                    />
+                    <Route
+                        path="/stream/:key"
+                        component={withRouter(StreamDetailsScreen)}
+                    />
+                    <Route
+                        path="/dataset/:key"
+                        component={withRouter(DatasetsDetailsScreen)}
+                    />
+                    <Route
+                        path="/unsubscribed"
+                        component={withRouter(UnsubscribedScreen)}
+                    />
+                    <Route path="/" component={LandingScreen} />
+                </Switch>
+            </ConnectedRouter>
+        </Provider>
+    </ThemeProvider>
+)
+
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
+const render = () => {
+  renderMethod(
+      <App />
+    ,
     MOUNT_NODE
   );
 };
