@@ -1,4 +1,5 @@
 import axios from 'axios';
+import localStorage from '../localstorage';
 
 //Note: I removed cachedToken from boilerplate, not clear what it was used for
 

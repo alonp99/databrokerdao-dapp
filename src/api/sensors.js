@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import each from 'lodash/each';
 
 /**
  * API
@@ -34,7 +34,7 @@ export function fetchSensor(authenticatedAxiosClient, key, queryParams) {
  */
 export function parseDatasets(sensors) {
   const parsedSensors = {};
-  _.each(sensors, sensor => {
+  each(sensors, sensor => {
     parsedSensors[sensor.key] = parseDataset(sensor);
   });
   return parsedSensors;

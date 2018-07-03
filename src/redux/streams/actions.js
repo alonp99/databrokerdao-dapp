@@ -1,6 +1,7 @@
-import _ from 'lodash';
+import each from 'lodash/each';
+import find from 'lodash/find';
+import map from 'lodash/map';
 import axios from '../../utils/axios';
-import Bluebird from 'bluebird';
 import { fetchSensors } from '../../api/sensors';
 
 const APIKey = 'AIzaSyBv4e2Uj5ZFp82G8QXKfYv7Ea3YutD4eTg';
@@ -40,7 +41,7 @@ export const STREAMS_ACTIONS = {
       if (filter.types && filter.types.length === 1)
         filterUrlQuery = `type=${filter.types[0]}`;
       else
-        filterUrlQuery = _.map(filter.types, type => {
+        filterUrlQuery = map(filter.types, type => {
           return `type[]=${type}`;
         }).join('&');
 
@@ -88,9 +89,9 @@ export const STREAMS_ACTIONS = {
               return;
             }
             const parsedResponse = {};
-            _.each(response.data.items, item => {
+            each(response.data.items, item => {
               //Temporary filter out streams at same coordinates (should be supported in UI in future)
-              const itemAtSameCoordinates = _.find(
+              const itemAtSameCoordinates = find(
                 parsedResponse,
                 parsedItem => {
                   return (
@@ -197,7 +198,7 @@ export const STREAMS_ACTIONS = {
             .get(`/sensorregistry/list?${urlParametersNearbyStreams}`)
             .then(response => {
               let parsedResponse = [];
-              _.each(response.data.items, item => {
+              each(response.data.items, item => {
                 //The stream itself is not a similar nearby stream
                 if (item.key === streamKey) return;
 
@@ -279,8 +280,8 @@ export const STREAMS_ACTIONS = {
         )
         .then(response => {
           const parsedResponse = {};
-          _.each(response.data.items, item => {
-            const itemAtSameCoordinates = _.find(parsedResponse, parsedItem => {
+          each(response.data.items, item => {
+            const itemAtSameCoordinates = find(parsedResponse, parsedItem => {
               return (
                 parsedItem.geometry.coordinates[0] ===
                   item.geo.coordinates[1] &&
@@ -413,7 +414,7 @@ export const STREAMS_ACTIONS = {
         });
       }
 
-      Bluebird.all([
+      Promise.all([
         getDtxTokenRegistry(),
         getStreamRegistry(),
         getMetadataHash()

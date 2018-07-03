@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps"
 import { connect } from 'react-redux'
-import _ from 'lodash';
+import values from 'lodash/values';
+import sortBy from 'lodash/each';
+import map from 'lodash/map';
+import filter from 'lodash/filter';
 import supercluster from 'supercluster';
 
 import DiscoverMapMarker from './DiscoverMapMarker';
@@ -81,13 +84,13 @@ class DiscoverMap extends Component {
         radius: 160, //Cluster radius in pixels
         maxZoom: 16 //Maximum zoom level at which clusters are generated
     });
-    clusterIndex.load(_.values(streams));
+    clusterIndex.load(values(streams));
     const clusters = clusterIndex.getClusters([-180, -85, 180, 85], this.state.mapRef.getZoom()); //[westLng, southLat, eastLng, northLat], zoom
 
     //Only render markers and clusters within 1.25 times diagonal of screen
     //So if you zoom in you don't render streams that cannot be seen (= clipping)
     const bounds = this.state.mapRef.getBounds();
-    const nearbyClusters = _.filter(clusters, cluster => {
+    const nearbyClusters = filter(clusters, cluster => {
       const distance = this.distanceInMeter(bounds.f.f,bounds.b.b,bounds.f.b,bounds.b.f)/2*1.25; //divide by 2 to get distance from center, then *1.25 to have slightly larger circle
       const mapCenter = this.state.mapRef.getCenter();
       const clusterDistance = this.distanceInMeter(cluster.geometry.coordinates[0],cluster.geometry.coordinates[1],mapCenter.lat(),mapCenter.lng());
@@ -95,9 +98,9 @@ class DiscoverMap extends Component {
     });
 
     //Sort on lat to prevent (most) z-index issues
-    const sortedClusters = _.sortBy(nearbyClusters, cluster => { return (cluster.properties && cluster.properties.cluster === true)? -cluster.geometry.coordinates[0]*2:-cluster.geometry.coordinates[0]; });
+    const sortedClusters = sortBy(nearbyClusters, cluster => { return (cluster.properties && cluster.properties.cluster === true)? -cluster.geometry.coordinates[0]*2:-cluster.geometry.coordinates[0]; });
 
-    const clusteredMarkers = _.map(sortedClusters, cluster => {
+    const clusteredMarkers = map(sortedClusters, cluster => {
       if(cluster.properties && cluster.properties.cluster === true){
         const position = { lng: cluster.geometry.coordinates[1], lat: cluster.geometry.coordinates[0] };
         return <Cluster

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, DialogContainer, CircularProgress } from 'react-md';
 import styled from 'styled-components';
-import _ from 'lodash';
+import map from 'lodash/map';
 
 export default class TransactionDialog extends Component {
   constructor(props){
@@ -45,7 +45,7 @@ export default class TransactionDialog extends Component {
       }
     `;
 
-    const steps = _.map(this.props.steps, (step) => {
+    const steps = map(this.props.steps, (step) => {
       return (
         <StyledStep className={(step.id === this.props.stepIndex)?"active":""} key={step.id}>
           {step.description}

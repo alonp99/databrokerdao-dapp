@@ -1,3 +1,5 @@
+// ignore localStorage requests in SSR
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import { unregister } from './registerServiceWorker';
@@ -7,68 +9,53 @@ import createHistory from 'history/createBrowserHistory';
 import { Switch, Route, withRouter } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import createStore from './redux/create-store';
-import Mixpanel from 'mixpanel-browser';
 import { ThemeProvider } from 'styled-components';
 import BigNumber from 'bignumber.js';
 
 import Loadermanager from './utils/Loadermanager';
 import './styles/index.css';
-import WebFontLoader from 'webfontloader';
 import {
   userIsNotAuthenticatedRedir,
   userIsAuthenticatedRedir
 } from './utils/auth';
 import './index.css';
 import theme from './utils/theme';
+import LandingScreen from './components/landing/LandingScreen';
 
 const AuthContainer = Loadermanager(() =>
-  import('./components/authentication/AuthContainer')
-);
-const LandingScreen = Loadermanager(() =>
-  import('./components/landing/LandingScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/authentication/AuthContainer')
 );
 const DiscoverScreen = Loadermanager(() =>
-  import('./components/streams/DiscoverScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/streams/DiscoverScreen')
 );
 const PurchasesScreen = Loadermanager(() =>
-  import('./components/purchases/PurchasesScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/purchases/PurchasesScreen')
 );
 const ListingsScreen = Loadermanager(() =>
-  import('./components/listings/ListingsScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/listings/ListingsScreen')
 );
 const EnlistScreen = Loadermanager(() =>
-  import('./components/listings/EnlistScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/listings/EnlistScreen')
 );
 const WalletScreen = Loadermanager(() =>
-  import('./components/wallet/WalletScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/wallet/WalletScreen')
 );
 const StreamDetailsScreen = Loadermanager(() =>
-  import('./components/details/stream/StreamDetailsScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/details/stream/StreamDetailsScreen')
 );
 const UnsubscribedScreen = Loadermanager(() =>
-  import('./components/unsubscribed/UnsubscribedScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/unsubscribed/UnsubscribedScreen')
 );
 const DatasetsScreen = Loadermanager(() =>
-  import('./components/datasets/DatasetsScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/datasets/DatasetsScreen')
 );
 const DatasetsDetailsScreen = Loadermanager(() =>
-  import('./components/details/dataset/DatasetDetailsScreen')
+  import(/* webpackChunkName: 'lazy' */ './components/details/dataset/DatasetDetailsScreen')
 );
-
-WebFontLoader.load({
-  google: {
-    families: [
-      'Open Sans:300,400,500,700',
-      'Titillium Web:300,400,600,700,900',
-      'Material Icons'
-    ]
-  }
-});
-
-Mixpanel.init('544eb1c36a2ccbf02c7661d8b7525d81');
 
 // Config bigbumber globally so it will display all numbers with enough decimals. We don't want any scientific notations!
 BigNumber.config({ EXPONENTIAL_AT: 256 });
+
 
 // ========================================================
 // Store Instantiation

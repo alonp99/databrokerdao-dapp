@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import map from 'lodash/map';
 import axios from '../../utils/axios';
 import {
   fetchSensors,
@@ -40,8 +40,7 @@ export const DATASET_ACTIONS = {
       if (filter.categories && filter.categories.length === 1)
         filterUrlQuery += `category=${filter.categories[0]}`;
       else
-        filterUrlQuery += _
-          .map(filter.categories, cat => {
+        filterUrlQuery += map(filter.categories, cat => {
             return `category[]=${cat}`;
           })
           .join('&');
@@ -52,8 +51,7 @@ export const DATASET_ACTIONS = {
       if (filter.filetypes && filter.filetypes.length === 1)
         filterUrlQuery += `filetype=${filter.filetypes[0]}`;
       else
-        filterUrlQuery += _
-          .map(filter.filetypes, type => {
+        filterUrlQuery += map(filter.filetypes, type => {
             return `filetype[]=${type}`;
           })
           .join('&');

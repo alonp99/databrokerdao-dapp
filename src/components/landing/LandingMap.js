@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
-import _ from 'lodash';
+import values from 'lodash/values';
+import sortBy from 'lodash/sortBy';
+import map from 'lodash/map';
 import { connect } from 'react-redux';
 import supercluster from 'supercluster';
 
@@ -35,13 +37,13 @@ class LandingMap extends Component {
         radius: 160, //Cluster radius in pixels
         maxZoom: 16 //Maximum zoom level at which clusters are generated
     });
-    clusterIndex.load(_.values(streams));
+    clusterIndex.load(values(streams));
     const clusters = clusterIndex.getClusters([-180, -85, 180, 85], this.state.mapRef.getZoom()); //[westLng, southLat, eastLng, northLat], zoom
 
     //Sort on lat to prevent (some) z-index issues
-    const sortedClusters = _.sortBy(clusters, cluster => { return (cluster.properties && cluster.properties.cluster === true)? -cluster.geometry.coordinates[0]*2:-cluster.geometry.coordinates[0]; });
+    const sortedClusters = sortBy(clusters, cluster => { return (cluster.properties && cluster.properties.cluster === true)? -cluster.geometry.coordinates[0]*2:-cluster.geometry.coordinates[0]; });
 
-    const clusteredMarkers = _.map(sortedClusters, cluster => {
+    const clusteredMarkers = map(sortedClusters, cluster => {
       if(cluster.properties && cluster.properties.cluster === true){
         return <Cluster
                   key={cluster.properties.cluster_id}

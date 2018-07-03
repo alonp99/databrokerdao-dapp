@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { DatePicker, Checkbox } from 'react-md';
 import { connect } from 'react-redux';
-import Mixpanel from 'mixpanel-browser';
 import moment from 'moment';
 import { BigNumber } from 'bignumber.js';
 import { withRouter } from 'react-router-dom';
@@ -59,7 +58,6 @@ class PurchaseStreamDialog extends Component {
       if (!this.props.token) this.setState({ stepIndex: STEP_REGISTRATION });
       else this.setState({ stepIndex: STEP_CONFIG });
     } else if (step === STEP_REGISTRATION) {
-      Mixpanel.track('Finish registration for purchase');
       this.setState({ stepIndex: STEP_CONFIG });
     } else if (step === STEP_CONFIG) {
       //Check if user has enough DTX in wallet
@@ -82,7 +80,6 @@ class PurchaseStreamDialog extends Component {
     } else if (step === STEP_PURCHASING)
       this.setState({ stepIndex: STEP_SUCCESS });
     else if (step === STEP_SUCCESS) {
-      Mixpanel.track('Finished purchase stream');
       this.props.fetchPurchases();
       this.props.hideEventHandler();
     } else if (step === STEP_BALANCE_ERROR) {

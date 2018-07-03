@@ -1,26 +1,32 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import LandingMap from './LandingMap';
+import Map from '../../assets/map_bg_c.jpg';
 
 export default class LandingBackground extends Component {
-  render() {
-    const mapElementsStyle = {
-      height: `100%`,
-      width:"100%",
-      position:"absolute",
-      top:"0",
-      left: "0"
-    };
+    render() {
+        const containerStyle = {
+            height: `100%`,
+            width: '100%', /* or whatever is required */
+            textAlign: 'center', /* ensures the image is always in the h-middle */
+            overflow: 'hidden', /* hide the cropped portion */
+            top: "0",
+            left: "0",
+            position: "absolute",
+            zIndex: "-1",
+        }
 
-    const APIKey = "AIzaSyBv4e2Uj5ZFp82G8QXKfYv7Ea3YutD4eTg";
 
-    return (
-      <LandingMap
-        googleMapURL={!this.props.error.message ? `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${APIKey}` : `https://maps.google.cn/maps/api/js?v=3.exp&key=${APIKey}`}
-        loadingElement={<div style={mapElementsStyle} />}
-        containerElement={<div style={{zIndex:"-1", ...mapElementsStyle}} />}
-        mapElement={<div style={mapElementsStyle} />}
-        />
-    );
-  }
+        const imgStyle = {
+            height: `100%`,
+            position: 'relative', /* allows repositioning */
+            left: '100%', /* move the whole width of the image to the right */
+            marginLeft: '-200%', /* magic! */
+        };
+
+        return (
+            <div style={containerStyle}>
+                <img src={Map} alt="MapExample" style={imgStyle}/>
+            </div>
+        );
+    }
 }
