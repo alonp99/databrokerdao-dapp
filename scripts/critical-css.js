@@ -3,9 +3,9 @@ const glob = require("glob")
 
 const src = dest = 'index.html'
 
-console.log(`[critical-css]: injecting critical css to ${dest} ...`)
+console.log(`[critical-css]: injecting critical css to ${dest} ...`);
 
-const css = glob.sync('./build/static/css/*.css')
+const css = glob.sync('./build/static/css/*.css');
 
 critical.generate({
   src,

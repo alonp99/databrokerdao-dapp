@@ -65,7 +65,7 @@
     "lint": "eslint src",
     "start-js": "node scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && node scripts/build.js && node scripts/addPreloadLinks.js && node scripts/critical-css.js",
+    "build": "npm run build-css && node scripts/build.js && node scripts/critical-css.js",
     "pretest": "npm run lint",
     "analyze": "node scripts/analyze.js",
     "test": "node scripts/test.js --env=jsdom --coverage --collectCoverageFrom='src/**/*.{js,jsx}' || exit 0",
@@ -78,7 +78,13 @@
       "react-app"
     ],
     "plugins": [
-      "transform-es2015-modules-commonjs"
+      "transform-es2015-modules-commonjs",
+      [
+        "babel-plugin-styled-components",
+        {
+          "ssr": true
+        }
+      ]
     ]
   },
   "eslintConfig": {
@@ -122,6 +128,10 @@
     "url": "https://github.com/databrokerdao/databrokerdao-dapp.git"
   },
   "devDependencies": {
-    "semantic-release": "^12.4.1"
+    "babel-plugin-styled-components": "^1.5.1",
+    "babel-plugin-transform-imports": "^1.5.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "semantic-release": "^12.4.1",
+    "webpack-react-md-import-transformer": "^1.1.0"
   }
 }
