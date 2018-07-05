@@ -2,6 +2,7 @@ import Wallet from 'ethereumjs-wallet';
 import axios from '../../utils/axios';
 import ECIES from './ecies';
 import Notifications from 'react-notification-system-redux';
+import localStorage from '../../localstorage';
 
 // ------------------------------------
 // Constants

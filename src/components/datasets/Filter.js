@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Chip, Avatar } from 'react-md';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import findIndex from 'lodash/findIndex';
+import indexOf from 'lodash/indexOf';
+import pull from 'lodash/pull';
+import concat from 'lodash/concat';
+import map from 'lodash/map';
+
 import Immutable from 'seamless-immutable';
 
 import Icon from '../generic/Icon';
@@ -26,15 +31,15 @@ class Filter extends Component {
     const newFilter = Immutable.asMutable(this.props.filter, { deep: true });
     const newFileType = value;
 
-    if (_.indexOf(newFilter.filetypes, newFileType) === -1) {
-      newFilter.filetypes = _.concat(newFilter.filetypes, newFileType);
+    if (indexOf(newFilter.filetypes, newFileType) === -1) {
+      newFilter.filetypes = concat(newFilter.filetypes, newFileType);
       this.props.fetchDatasets(newFilter);
     }
   }
 
   removeFiletypeFromFilter(id) {
     const newFilter = Immutable.asMutable(this.props.filter, { deep: true });
-    newFilter.filetypes = _.pull(newFilter.filetypes, id);
+    newFilter.filetypes = pull(newFilter.filetypes, id);
     this.props.fetchDatasets(newFilter);
   }
 
@@ -47,9 +52,9 @@ class Filter extends Component {
       </option>
     ];
 
-    return _.concat(
+    return concat(
       options,
-      _.map(filetypes, type => {
+      map(filetypes, type => {
         return (
           <option key={type.id} value={type.id}>
             {type.name}
@@ -77,7 +82,7 @@ class Filter extends Component {
 
     if (availableFiletypes.length === 0) return '';
 
-    return _.map(filetypes, file => {
+    return map(filetypes, file => {
       return (
         <StyledChip
           key={file}
@@ -106,15 +111,15 @@ class Filter extends Component {
     const newFilter = Immutable.asMutable(this.props.filter, { deep: true });
     const newCategory = value;
 
-    if (_.indexOf(newFilter.categories, newCategory) === -1) {
-      newFilter.categories = _.concat(newFilter.categories, newCategory);
+    if (indexOf(newFilter.categories, newCategory) === -1) {
+      newFilter.categories = concat(newFilter.categories, newCategory);
       this.props.fetchDatasets(newFilter);
     }
   }
 
   removeCategoryFromFilter(id) {
     const newFilter = Immutable.asMutable(this.props.filter, { deep: true });
-    newFilter.categories = _.pull(newFilter.categories, id);
+    newFilter.categories = pull(newFilter.categories, id);
     this.props.fetchDatasets(newFilter);
   }
 
@@ -127,9 +132,9 @@ class Filter extends Component {
       </option>
     ];
 
-    return _.concat(
+    return concat(
       options,
-      _.map(categories, cat => {
+      map(categories, cat => {
         return (
           <option key={cat.id} value={cat.id}>
             {cat.name}
@@ -157,7 +162,7 @@ class Filter extends Component {
 
     if (availableCategories.length === 0) return '';
 
-    return _.map(categories, cat => {
+    return map(categories, cat => {
       return (
         <StyledChip
           key={cat}
@@ -214,7 +219,7 @@ class Filter extends Component {
         label: 'json',
         value: 'json',
         disabled:
-          _.findIndex(this.props.filter.filetypes, type => {
+          findIndex(this.props.filter.filetypes, type => {
             return type === 'json';
           }) >= 0
       },
@@ -222,7 +227,7 @@ class Filter extends Component {
         label: 'xls',
         value: 'xls',
         disabled:
-          _.findIndex(this.props.filter.filetypes, type => {
+          findIndex(this.props.filter.filetypes, type => {
             return type === 'xls';
           }) >= 0
       },
@@ -230,7 +235,7 @@ class Filter extends Component {
         label: 'csv',
         value: 'csv',
         disabled:
-          _.findIndex(this.props.filter.filetypes, type => {
+          findIndex(this.props.filter.filetypes, type => {
             return type === 'csv';
           }) >= 0
       }
@@ -241,7 +246,7 @@ class Filter extends Component {
         label: 'Agriculture',
         value: 'agriculture',
         disabled:
-          _.findIndex(this.props.filter.categories, type => {
+          findIndex(this.props.filter.categories, type => {
             return type === 'agriculture';
           }) >= 0
       },
@@ -249,7 +254,7 @@ class Filter extends Component {
         label: 'Environment',
         value: 'environment',
         disabled:
-          _.findIndex(this.props.filter.categories, type => {
+          findIndex(this.props.filter.categories, type => {
             return type === 'environment';
           }) >= 0
       },
@@ -257,7 +262,7 @@ class Filter extends Component {
         label: 'Health',
         value: 'health',
         disabled:
-          _.findIndex(this.props.filter.categories, type => {
+          findIndex(this.props.filter.categories, type => {
             return type === 'health';
           }) >= 0
       },
@@ -265,7 +270,7 @@ class Filter extends Component {
         label: 'Energy',
         value: 'energy',
         disabled:
-          _.findIndex(this.props.filter.categories, type => {
+          findIndex(this.props.filter.categories, type => {
             return type === 'energy';
           }) >= 0
       }

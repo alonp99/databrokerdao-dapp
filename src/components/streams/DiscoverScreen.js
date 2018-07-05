@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Mixpanel from 'mixpanel-browser';
 
 import Toolbar from '../generic/Toolbar';
 import DiscoverMap from './DiscoverMap';
@@ -9,7 +8,6 @@ import MapErrorBoundary from '../generic/MapErrorBoundary';
 
 export default class DiscoverScreen extends Component {
   componentDidMount() {
-    Mixpanel.track('View streams screen');
   }
 
   constructor(props) {

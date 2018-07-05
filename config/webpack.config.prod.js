@@ -1,5 +1,4 @@
 
-
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
@@ -10,6 +9,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const reactMdTransformer = require('webpack-react-md-import-transformer/lib/webpack-react-md-import-transformer.min');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -149,8 +149,17 @@ module.exports = {
             include: [paths.appSrc].concat(paths.babelIncludes),
             loader: require.resolve('babel-loader'),
             options: {
-
-              compact: true,
+                plugins: [["babel-plugin-styled-components", {
+                    "ssr": true
+                }],
+                [require('babel-plugin-transform-imports'), {
+                    "react-md": {
+                        "transform": reactMdTransformer,
+                        preventFullImport: true
+                    }
+                }]
+                ],
+                compact: true,
             },
           },
           // The notation here is somewhat confusing.
@@ -321,6 +330,11 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',
+        chunks: ['main', 'LandingScreen'],
+        minChunks: module => /node_modules/.test(module.resource)
+    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

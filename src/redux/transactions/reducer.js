@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import Immutable from 'seamless-immutable';
 
 import { TRANSACTIONS_TYPES } from './actions.js';
@@ -9,9 +9,9 @@ export const DEFAULT_STATE = {
   filter: {
     type: '',
     startDate: new Date(
-      _.clone(new Date()).setMonth(new Date().getMonth() - 1)
+      clone(new Date()).setMonth(new Date().getMonth() - 1)
     ),
-    endDate: new Date(_.clone(new Date()).setHours(23, 59, 59, 999)),
+    endDate: new Date(clone(new Date()).setHours(23, 59, 59, 999)),
     start: 0,
     limit: 10,
     dir: 'desc'

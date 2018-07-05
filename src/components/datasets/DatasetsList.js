@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import size from 'lodash/size';
+import map from 'lodash/map';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { convertWeiToDtx } from '../../utils/transforms';
@@ -56,7 +57,7 @@ class DatasetsList extends Component {
       margin: 0;
     `;
 
-    let listItems = _.map(datasets, (dataset, index) => {
+    let listItems = map(datasets, (dataset, index) => {
       return (
         <TableRow
           key={`${dataset.key}row${index}`}
@@ -135,7 +136,7 @@ class DatasetsList extends Component {
             style={{ marginLeft: 0 }}
             onPagination={this.handlePagination}
             defaultRowsPerPage={10}
-            rows={_.size(this.props.datasets)}
+            rows={size(this.props.datasets)}
           />
         </DataTable>
       </StyledList>

@@ -1,5 +1,5 @@
 process.env.BABEL_ENV = 'production';
-process.env.NDOE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 
 process.on('unhandledRejection', (err) => {
     throw err
@@ -11,6 +11,6 @@ const webpackConfigProd = require('../config/webpack.config.prod');
 
 webpackConfigProd
     .plugins
-    .push(new BundleAnalyzer())
+    .push(new bundleAnalyzer())
 
 require('./build');

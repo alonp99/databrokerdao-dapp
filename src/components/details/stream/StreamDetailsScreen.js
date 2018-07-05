@@ -3,14 +3,13 @@ import {
   FontIcon,
   DropdownMenu,
   AccessibleFakeButton,
-  IconSeparator,
   ListItem
 } from 'react-md';
+import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import Mixpanel from 'mixpanel-browser';
 import { BigNumber } from 'bignumber.js';
-import _ from 'lodash';
+import find from 'lodash/find';
 import moment from 'moment';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faQuestionCircle from '@fortawesome/fontawesome-free-regular/faQuestionCircle';
@@ -30,6 +29,7 @@ import ChallengesTable from '../ChallengesTable';
 import NearbyStreamsTable from './NearbyStreamsTable';
 import TitleCTAButton from '../../generic/TitleCTAButton';
 import { convertWeiToDtx } from '../../../utils/transforms';
+import localStorage from '../../../localstorage';
 
 class StreamDetailsScreen extends Component {
   constructor(props) {
@@ -47,7 +47,6 @@ class StreamDetailsScreen extends Component {
     this.props.fetchStream();
     this.props.fetchAvailableStreamTypes();
     if (this.props.token) this.props.fetchPurchases();
-    Mixpanel.track('View stream details screen');
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -64,14 +63,10 @@ class StreamDetailsScreen extends Component {
   }
 
   togglePurchaseStream() {
-    if (!this.state.PurchaseStreamVisible)
-      Mixpanel.track('View purchase stream dialog');
     this.setState({ PurchaseStreamVisible: !this.state.PurchaseStreamVisible });
   }
 
   toggleChallengeDialog(event) {
-    if (!this.state.PurchaseStreamVisible)
-      Mixpanel.track('View challenge stream dialog');
     this.setState({
       ChallengeDialogVisible: !this.state.ChallengeDialogVisible
     });
@@ -146,7 +141,7 @@ class StreamDetailsScreen extends Component {
     );
     const stake = convertWeiToDtx(stream.stake);
 
-    const purchase = _.find(this.props.purchases, purchase => {
+    const purchase = find(this.props.purchases, purchase => {
       return purchase.key === this.props.stream.key;
     });
     const purchased = purchase !== undefined;
