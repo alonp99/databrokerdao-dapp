@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import Map from '../../assets/map_bg_c.jpg';
+import Map from '../../assets/map_bg_lc.jpg';
 
 export default class LandingBackground extends Component {
     render() {
