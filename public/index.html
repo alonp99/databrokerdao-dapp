@@ -27,7 +27,9 @@
   <link href="https://fonts.googleapis.com/css?family=Open Sans:300,400,500,700|Titillium Web:300,400,600,700,900" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <meta name="theme-color" content="#ffffff">
+  <% if (process.env.NODE_ENV === 'production') { %>
   <%= require('../src/prerender').styleTags %>
+  <% } %>
 </head>
 
 <body>
