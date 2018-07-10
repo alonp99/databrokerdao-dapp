@@ -10,11 +10,13 @@ import supercluster from 'supercluster';
 import DiscoverMapMarker from './DiscoverMapMarker';
 import Cluster from '../generic/Cluster';
 import { STREAMS_ACTIONS } from '../../redux/streams/actions';
+import {USER_ACTIONS} from "../../redux/user/actions";
 
 class DiscoverMap extends Component {
   constructor(props){
     super(props);
 
+    this.props.updateUserLocation();
     this.state = {
       clusteredMarkers:null,
       openedMapMarker:null,
@@ -137,7 +139,7 @@ class DiscoverMap extends Component {
     return (
       <GoogleMap
        zoom={this.props.map.zoom}
-       center={{lat: this.props.map.lat, lng: this.props.map.lng}}
+       center={ this.props.userLocation || this.props.map }
        options={MapOptions}
        onZoomChanged={() => this.mapChanged()}
        onDragEnd={() => this.mapChanged()}
@@ -153,13 +155,15 @@ class DiscoverMap extends Component {
 const mapStateToProps = state => ({
   streams: state.streams.streams,
   fetchingStreams: state.streams.fetchingStreams,
-  map: state.streams.map
+  map: state.streams.map,
+  userLocation: state.user.location
 })
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchStreams: (lng,lat,distance) => dispatch(STREAMS_ACTIONS.fetchStreams(null,lng,lat,distance)),
-    updateMap: (map) => dispatch(STREAMS_ACTIONS.updateMap(map))
+    updateMap: (map) => dispatch(STREAMS_ACTIONS.updateMap(map)),
+    updateUserLocation: () => dispatch(USER_ACTIONS.updateLocation())
   }
 }
 

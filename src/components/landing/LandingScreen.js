@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Toolbar from '../generic/Toolbar';
 import LandingContent from './LandingContent';
 import LandingBackground from './LandingBackground';
+import MapErrorBoundary from '../generic/MapErrorBoundary';
 
 export default class LandingScreen extends Component {
   componentDidMount() {
@@ -13,7 +14,13 @@ export default class LandingScreen extends Component {
       <div>
         <Toolbar showTabs={false} />
         <LandingContent />
-        <LandingBackground />
+        <MapErrorBoundary>
+          {
+            (error) => {
+              return <LandingBackground error={error} />
+            }
+          }
+        </MapErrorBoundary>
       </div>
     );
   }
