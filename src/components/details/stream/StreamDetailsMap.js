@@ -189,7 +189,7 @@ export default withScriptjs(
 
         return (
           <GoogleMap
-            defaultZoom={16}
+            defaultZoom={10}
             center={{
               lng: this.props.stream.geometry.coordinates[1],
               lat: this.props.stream.geometry.coordinates[0]
