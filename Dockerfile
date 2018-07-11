@@ -8,6 +8,7 @@ ENV REACT_APP_DAPI_URL=$REACT_APP_DAPI_URL
 COPY .npmrc .npmrc
 RUN npm i
 COPY . ./
+ENV NODE_ENV=production
 RUN npm run build
 
 FROM nginx:1.13.8-alpine

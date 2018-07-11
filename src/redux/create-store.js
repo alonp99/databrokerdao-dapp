@@ -8,7 +8,7 @@ export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middlewares = [thunk, routerMiddleware(history), logger];
+  const middlewares = [thunk, routerMiddleware(history)];
 
   // ======================================================
   // Store Enhancers
@@ -18,6 +18,7 @@ export default (initialState = {}, history) => {
   let composeEnhancers = compose;
 
   if (process.env.NODE_ENV === 'development') {
+    middlewares.push(logger)
     const composeWithDevToolsExtension =
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
     if (typeof composeWithDevToolsExtension === 'function') {
