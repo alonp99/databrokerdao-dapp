@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { TextField } from 'react-md';
 import { connect } from 'react-redux';
-import Mixpanel from 'mixpanel-browser';
 import { BigNumber } from 'bignumber.js';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faQuestionCircle from '@fortawesome/fontawesome-free-regular/faQuestionCircle';
@@ -77,7 +76,6 @@ class ChallengeStreamDialog extends Component {
     else if(step === STEP_CHALLENGING)
       this.setState({stepIndex:STEP_SUCCESS});
     else if(step === STEP_SUCCESS){
-      Mixpanel.track("Finished challenging stream");
       this.props.fetchStreamEventHandler();
       this.props.hideEventHandler();
     }

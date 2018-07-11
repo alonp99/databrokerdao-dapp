@@ -8,6 +8,8 @@ import WalletReducer from './wallet/reducer';
 import ListingsReducer from './listings/reducer';
 import DatasetsReducer from './datasets/reducer';
 import TransactionsReducer from './transactions/reducer';
+import ErrorReducer from './errors/reducer';
+import UserReducer from './user/reducer';
 
 /**
  * This is the global reducer to which all reducers which are loaded at runtime are added.
@@ -32,6 +34,8 @@ const rootReducer = (asyncReducers, initialState) => {
     listings: ListingsReducer,
     datasets: DatasetsReducer,
     transactions: TransactionsReducer,
+    error: ErrorReducer,
+    user: UserReducer,
     ...asyncReducers,
     ...missingReducers
   });

@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import each from 'lodash/each';
 import axios from '../../utils/axios';
-import Bluebird from 'bluebird';
 import { BigNumber } from 'bignumber.js';
+import localStorage from '../../localstorage';
 
 export const LISTING_TYPES = {
   FETCH_LISTINGS: 'FETCH_LISTINGS',
@@ -26,7 +26,7 @@ export const LISTING_ACTIONS = {
           const listings = response.data.items;
 
           const parsedResponse = [];
-          _.each(listings, listing => {
+          each(listings, listing => {
             parsedResponse.push({
               key: listing.key,
               name: listing.name,
@@ -77,7 +77,7 @@ export const LISTING_ACTIONS = {
         });
       }
 
-      Bluebird.all([
+      Promise.all([
         getDtxTokenRegistry(),
         getStreamRegistry(),
         getMetadataHash()

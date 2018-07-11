@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import each from 'lodash/each';
 import axios from '../../utils/axios';
-import Bluebird from 'bluebird';
 import moment from 'moment';
+import localStorage from '../../localstorage';
 
 export const PURCHASES_TYPES = {
   FETCH_PURCHASES: 'FETCH_PURCHASES',
@@ -33,11 +33,11 @@ export const PURCHASES_ACTIONS = {
           const purchases = response.data.items;
 
           const streamDetailCalls = [];
-          _.each(purchases, purchase => {
+          each(purchases, purchase => {
             streamDetailCalls.push(getStreamDetails(purchase.sensor));
           });
 
-          Bluebird.all(streamDetailCalls).then(streamDetails => {
+          Promise.all(streamDetailCalls).then(streamDetails => {
             const parsedResponse = [];
 
             for (let i = 0; i < purchases.length; i++) {
@@ -99,7 +99,7 @@ export const PURCHASES_ACTIONS = {
         });
       }
 
-      Bluebird.all([
+      Promise.all([
         getDtxTokenRegistry(),
         getPurchaseRegistry(),
         getMetadataHash()

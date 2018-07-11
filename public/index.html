@@ -24,14 +24,23 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/manifest.json">
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <link href="https://fonts.googleapis.com/css?family=Open Sans:300,400,500,700|Titillium Web:300,400,600,700,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <meta name="theme-color" content="#ffffff">
+  <% if (process.env.NODE_ENV === 'production') { %>
+  <%= require('../src/prerender').styleTags %>
+  <% } %>
 </head>
 
 <body>
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div id="root"></div>
+  <div id="root">
+    <% if (process.env.NODE_ENV === 'production') { %>
+    <%= require('../src/prerender').body %>
+    <% } %>
+  </div>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
-import _ from 'lodash';
+import values from 'lodash/values';
+import sortBy from 'lodash/sortBy';
+import map from 'lodash/map';
 import { connect } from 'react-redux';
 import supercluster from 'supercluster';
 
 import LandingMapMarker from './LandingMapMarker';
 import { STREAMS_ACTIONS } from '../../redux/streams/actions';
 import Cluster from '../generic/Cluster';
+import {USER_ACTIONS} from "../../redux/user/actions";
 
 class LandingMap extends Component {
   componentDidMount() {
@@ -16,6 +19,7 @@ class LandingMap extends Component {
   constructor(props){
     super(props);
 
+    this.props.updateUserLocation();
     this.state = {
       mapRef:null
     };
@@ -35,13 +39,13 @@ class LandingMap extends Component {
         radius: 160, //Cluster radius in pixels
         maxZoom: 16 //Maximum zoom level at which clusters are generated
     });
-    clusterIndex.load(_.values(streams));
+    clusterIndex.load(values(streams));
     const clusters = clusterIndex.getClusters([-180, -85, 180, 85], this.state.mapRef.getZoom()); //[westLng, southLat, eastLng, northLat], zoom
 
     //Sort on lat to prevent (some) z-index issues
-    const sortedClusters = _.sortBy(clusters, cluster => { return (cluster.properties && cluster.properties.cluster === true)? -cluster.geometry.coordinates[0]*2:-cluster.geometry.coordinates[0]; });
+    const sortedClusters = sortBy(clusters, cluster => { return (cluster.properties && cluster.properties.cluster === true)? -cluster.geometry.coordinates[0]*2:-cluster.geometry.coordinates[0]; });
 
-    const clusteredMarkers = _.map(sortedClusters, cluster => {
+    const clusteredMarkers = map(sortedClusters, cluster => {
       if(cluster.properties && cluster.properties.cluster === true){
         return <Cluster
                   key={cluster.properties.cluster_id}
@@ -63,7 +67,6 @@ class LandingMap extends Component {
 
   render() {
     const clusteredMarkers = this.clusterMarkers(this.props.streams);
-
     //Google maps styling: https://mapstyle.withgoogle.com
     const MapOptions = {
       clickableIcons: false,
@@ -73,7 +76,7 @@ class LandingMap extends Component {
     return (
       <GoogleMap
         defaultZoom={15}
-        defaultCenter={{ lat: 50.889244, lng: 4.700518 }}
+        center={this.props.userLocation}
         options={MapOptions}
         ref={(ref) => this.onMapMounted(ref)}
       >
@@ -84,12 +87,14 @@ class LandingMap extends Component {
 }
 
 const mapStateToProps = state => ({
-  streams: state.streams.landingStreams
+  streams: state.streams.landingStreams,
+  userLocation: state.user.location
 })
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLandingStreams: () => dispatch(STREAMS_ACTIONS.fetchLandingStreams())
+    fetchLandingStreams: () => dispatch(STREAMS_ACTIONS.fetchLandingStreams()),
+    updateUserLocation: () => dispatch(USER_ACTIONS.updateLocation())
   }
 }
 

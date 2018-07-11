@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Mixpanel from 'mixpanel-browser';
 import { BigNumber } from 'bignumber.js';
 import { withRouter } from 'react-router-dom';
 
@@ -50,14 +49,12 @@ class EnlistConfirmationDialog extends Component {
         }
     }
     else if(step === STEP_REGISTRATION){
-      Mixpanel.track("Finish registration for enlisting");
       this.props.enlistStream(this.props.stream);
       this.setState({stepIndex:STEP_ENLISTING});
     }
     else if(step === STEP_ENLISTING)
       this.setState({stepIndex:STEP_SUCCESS});
     else if(step === STEP_SUCCESS){
-      Mixpanel.track("Finished enlisting stream");
       this.props.hideEventHandler();
     }
     else if(step === STEP_BALANCE_ERROR){

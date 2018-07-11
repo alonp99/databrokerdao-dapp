@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import chain from 'lodash/chain';
 import axios from '../../utils/axios';
 
 export const TRANSACTIONS_TYPES = {
@@ -51,7 +51,7 @@ export const TRANSACTIONS_ACTIONS = {
 
       const { data } = retrieveResponse;
 
-      const transactionTypes = _.chain(data.contracts)
+      const transactionTypes = chain(data.contracts)
         .flatMap('contract.abi')
         .filter(i => i.type === 'event' && !i.name.includes('CacheInvalidated'))
         .value();

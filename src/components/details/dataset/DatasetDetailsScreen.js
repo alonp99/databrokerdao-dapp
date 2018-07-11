@@ -3,13 +3,12 @@ import {
   FontIcon,
   DropdownMenu,
   AccessibleFakeButton,
-  IconSeparator,
   ListItem
 } from 'react-md';
+import IconSeparator from 'react-md/lib/Helpers/IconSeparator';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import Mixpanel from 'mixpanel-browser';
-import _ from 'lodash';
+import find from 'lodash/find';
 import { BigNumber } from 'bignumber.js';
 import moment from 'moment';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -28,6 +27,7 @@ import TitleCTAButton from '../../generic/TitleCTAButton';
 import { convertWeiToDtx } from '../../../utils/transforms';
 import { DATASET_ACTIONS } from '../../../redux/datasets/actions';
 import { PURCHASES_ACTIONS } from '../../../redux/purchases/actions';
+import localStorage from '../../../localstorage';
 
 class DatasetDetailsScreen extends Component {
   constructor(props) {
@@ -47,7 +47,6 @@ class DatasetDetailsScreen extends Component {
     this.props.fetchAvailableFiletypes();
 
     if (this.props.token) this.props.fetchPurchases();
-    Mixpanel.track('View dataset details screen');
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -62,16 +61,12 @@ class DatasetDetailsScreen extends Component {
   }
 
   togglePurchaseDataset() {
-    if (!this.state.PurchaseDatasetVisible)
-      Mixpanel.track('View purchase dataset dialog');
     this.setState({
       PurchaseDatasetVisible: !this.state.PurchaseDatasetVisible
     });
   }
 
   toggleChallengeDialog(event) {
-    if (!this.state.ChallengeDialogVisible)
-      Mixpanel.track('View challenge dataset dialog');
     this.setState({
       ChallengeDialogVisible: !this.state.ChallengeDialogVisible
     });
@@ -159,7 +154,7 @@ class DatasetDetailsScreen extends Component {
 
     const stake = convertWeiToDtx(dataset.stake);
 
-    const purchase = _.find(this.props.purchases, purchase => {
+    const purchase = find(this.props.purchases, purchase => {
       return purchase.key === dataset.key;
     });
     const purchased = purchase !== undefined;

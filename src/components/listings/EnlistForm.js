@@ -3,7 +3,6 @@ import { withFormik } from 'formik';
 import Yup from 'yup';
 import styled from 'styled-components';
 import { Button } from 'react-md';
-import Mixpanel from 'mixpanel-browser';
 
 import EnhancedTextField from '../generic/EnhancedTextField';
 import EnhancedTextArea from '../generic/EnhancedTextArea';
@@ -20,8 +19,6 @@ export default class EnlistForm extends Component {
   }
 
   toggleConfirmationDialog() {
-    if (!this.state.ConfirmationDialogVisible)
-      Mixpanel.track('View enlisting confirmation dialog');
     this.setState({
       ConfirmationDialogVisible: !this.state.ConfirmationDialogVisible
     });

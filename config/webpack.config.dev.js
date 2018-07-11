@@ -9,6 +9,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const reactMdTransformer = require('webpack-react-md-import-transformer/lib/webpack-react-md-import-transformer.min');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
@@ -60,7 +61,7 @@ module.exports = {
     // This does not produce a real file. It's just the virtual path that is
     // served by WebpackDevServer in development. This is the JS bundle
     // containing code from all our entry points, and the Webpack runtime.
-    filename: 'static/js/bundle.js',
+    filename: 'static/js/[name].js',
     // There are also additional JS chunk files if you use code splitting.
     chunkFilename: 'static/js/[name].chunk.js',
     // This is the URL that app is served from. We use "/" in development.
@@ -146,7 +147,16 @@ module.exports = {
             include: [paths.appSrc].concat(paths.babelIncludes),
             loader: require.resolve('babel-loader'),
             options: {
-
+              plugins: [["babel-plugin-styled-components", {
+                  "ssr": true
+              }],
+              [require('babel-plugin-transform-imports'), {
+                  "react-md": {
+                      "transform": reactMdTransformer,
+                      preventFullImport: true
+                  }
+              }]
+              ],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
@@ -245,6 +255,11 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',
+        chunks: ['main', 'LandingScreen'],
+        minChunks: module => /node_modules/.test(module.resource)
+    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

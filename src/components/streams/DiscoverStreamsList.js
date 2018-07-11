@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { List, FontIcon } from 'react-md';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import map from 'lodash/map';
+
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { BigNumber } from 'bignumber.js';
@@ -51,7 +52,7 @@ class DiscoverStreamsList extends Component {
       margin: 0;
     `;
 
-    let listItems = _.map(streams, stream => {
+    let listItems = map(streams, stream => {
       return (
         <StyledListItem
           key={stream.id}

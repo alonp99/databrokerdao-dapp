@@ -11,6 +11,7 @@ import { logout } from '../../redux/authentication/reducer';
 import { WALLET_ACTIONS } from '../../redux/wallet/actions';
 import TitleCTAButton from '../generic/TitleCTAButton';
 // import TransactionsTable from './TransactionsTable';
+import localStorage from '../../localstorage';
 
 class WalletScreen extends Component {
   componentDidMount() {

@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Chip, Avatar } from 'react-md';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import findIndex from 'lodash/findIndex';
+import indexOf from 'lodash/indexOf';
+import pull from 'lodash/pull';
+import concat from 'lodash/concat';
+import map from 'lodash/map';
 import Immutable from 'seamless-immutable';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faTimesCircle from '@fortawesome/fontawesome-free-regular/faTimesCircle';
@@ -21,15 +25,15 @@ class Filter extends Component {
     const newFilter = Immutable.asMutable(this.props.filter, { deep: true });
     const newType = value;
 
-    if (_.indexOf(newFilter.types, newType) === -1) {
-      newFilter.types = _.concat(newFilter.types, newType);
+    if (indexOf(newFilter.types, newType) === -1) {
+      newFilter.types = concat(newFilter.types, newType);
       this.props.fetchStreams(newFilter);
     }
   }
 
   removeTypeFromFilter(id) {
     const newFilter = Immutable.asMutable(this.props.filter, { deep: true });
-    newFilter.types = _.pull(newFilter.types, id);
+    newFilter.types = pull(newFilter.types, id);
     this.props.fetchStreams(newFilter);
   }
 
@@ -42,9 +46,9 @@ class Filter extends Component {
       </option>
     ];
 
-    return _.concat(
+    return concat(
       options,
-      _.map(types, type => {
+      map(types, type => {
         return (
           <option key={type.id} value={type.id}>
             {type.name}
@@ -72,7 +76,7 @@ class Filter extends Component {
 
     if (availableTypes.length === 0) return '';
 
-    return _.map(types, type => {
+    return map(types, type => {
       return (
         <StyledChip
           key={type}
@@ -129,7 +133,7 @@ class Filter extends Component {
         label: 'Temperature',
         value: 'temperature',
         disabled:
-          _.findIndex(this.props.filter.types, type => {
+          findIndex(this.props.filter.types, type => {
             return type === 'temperature';
           }) >= 0
       },
@@ -137,7 +141,7 @@ class Filter extends Component {
         label: 'Humidity',
         value: 'humidity',
         disabled:
-          _.findIndex(this.props.filter.types, type => {
+          findIndex(this.props.filter.types, type => {
             return type === 'humidity';
           }) >= 0
       },
@@ -145,7 +149,7 @@ class Filter extends Component {
         label: 'PM 2.5',
         value: 'PM25',
         disabled:
-          _.findIndex(this.props.filter.types, type => {
+          findIndex(this.props.filter.types, type => {
             return type === 'PM25';
           }) >= 0
       },
@@ -153,7 +157,7 @@ class Filter extends Component {
         label: 'PM 10',
         value: 'PM10',
         disabled:
-          _.findIndex(this.props.filter.types, type => {
+          findIndex(this.props.filter.types, type => {
             return type === 'PM10';
           }) >= 0
       }
