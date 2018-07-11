@@ -11,6 +11,9 @@ export default function(state = Immutable(DEFAULT_STATE), action) {
     case ERROR_TYPES.GOOGLE_MAP_ERROR:{
       return Immutable.set(state, "googleMapError", action.error);
     }
+    case ERROR_TYPES.LOCATION_ERROR:{
+        return Immutable.set(state, "locationError", action.error);
+    }
     default:
       return state;
   }

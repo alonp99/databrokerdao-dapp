@@ -9,6 +9,7 @@ import supercluster from 'supercluster';
 import LandingMapMarker from './LandingMapMarker';
 import { STREAMS_ACTIONS } from '../../redux/streams/actions';
 import Cluster from '../generic/Cluster';
+import {USER_ACTIONS} from "../../redux/user/actions";
 
 class LandingMap extends Component {
   componentDidMount() {
@@ -18,6 +19,7 @@ class LandingMap extends Component {
   constructor(props){
     super(props);
 
+    this.props.updateUserLocation();
     this.state = {
       mapRef:null
     };
@@ -65,7 +67,6 @@ class LandingMap extends Component {
 
   render() {
     const clusteredMarkers = this.clusterMarkers(this.props.streams);
-
     //Google maps styling: https://mapstyle.withgoogle.com
     const MapOptions = {
       clickableIcons: false,
@@ -75,7 +76,7 @@ class LandingMap extends Component {
     return (
       <GoogleMap
         defaultZoom={15}
-        defaultCenter={{ lat: 50.889244, lng: 4.700518 }}
+        center={this.props.userLocation}
         options={MapOptions}
         ref={(ref) => this.onMapMounted(ref)}
       >
@@ -86,12 +87,14 @@ class LandingMap extends Component {
 }
 
 const mapStateToProps = state => ({
-  streams: state.streams.landingStreams
+  streams: state.streams.landingStreams,
+  userLocation: state.user.location
 })
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLandingStreams: () => dispatch(STREAMS_ACTIONS.fetchLandingStreams())
+    fetchLandingStreams: () => dispatch(STREAMS_ACTIONS.fetchLandingStreams()),
+    updateUserLocation: () => dispatch(USER_ACTIONS.updateLocation())
   }
 }
 
