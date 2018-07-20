@@ -139,9 +139,10 @@ class DiscoverMap extends Component {
     return (
       <GoogleMap
        zoom={this.props.map.zoom}
-       center={ this.props.userLocation || this.props.map }
+       center={ this.props.map }
        options={MapOptions}
        onZoomChanged={() => this.mapChanged()}
+       onCenterChanged={() => this.mapChanged()}
        onDragEnd={() => this.mapChanged()}
        ref={(ref) => this.onMapMounted(ref)}
        onBoundsChanged={() => this.boundsChanged()}
