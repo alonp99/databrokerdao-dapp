@@ -24,6 +24,26 @@ export const STREAMS_TYPES = {
   FETCH_FILTER_ADDRESS: 'FETCH_FILTER_ADDRESS' //Address (city) in location filter
 };
 
+function fetchFilterAddress(dispatch, lat, lng) {
+    //Geocode map center to set value of location filter (so e.g. "Kessel-Lo" shows up when moving the map to Kessel-Lo)
+    const latlng = `${lat},${lng}`;
+    const unAuthenticatedAxiosClient = axios(null, true, true);
+    unAuthenticatedAxiosClient
+        .get(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${APIKey}&result_type=locality`
+        )
+        .then(response => {
+            const filterAddress = response.data.results[0]
+                ? response.data.results[0].formatted_address
+                : 'Unkown address';
+
+            dispatch({
+                type: STREAMS_TYPES.FETCH_FILTER_ADDRESS,
+                filterAddress
+            });
+        });
+}
+
 export const STREAMS_ACTIONS = {
   fetchStreams: (_filter, _lat, _lng, _distance) => {
     return (dispatch, getState) => {
@@ -58,9 +78,10 @@ export const STREAMS_ACTIONS = {
         dispatch({
           type: STREAMS_TYPES.UPDATED_MAP,
           map: {
+            ...state.map,
             distance: _distance,
             lat: _lat,
-            lng: _lng
+            lng: _lng,
           }
         });
       } else {
@@ -355,6 +376,19 @@ export const STREAMS_ACTIONS = {
       STREAMS_ACTIONS.fetchStreams(dispatch, filter);
     };
   },
+  setCenter: (lat, lng) => {
+      return (dispatch, getState) => {
+          const { streams: { map } } = getState();
+          const newMap = {...map, lat, lng }
+
+          dispatch({
+              type: STREAMS_TYPES.UPDATED_MAP,
+              map: newMap
+          });
+
+          fetchFilterAddress(dispatch, lat, lng);
+      };
+  },
   updateMap: map => {
     return (dispatch, getState) => {
       dispatch({
@@ -362,23 +396,7 @@ export const STREAMS_ACTIONS = {
         map
       });
 
-      //Geocode map center to set value of location filter (so e.g. "Kessel-Lo" shows up when moving the map to Kessel-Lo)
-      const latlng = `${map.lat},${map.lng}`;
-      const unAuthenticatedAxiosClient = axios(null, true, true);
-      unAuthenticatedAxiosClient
-        .get(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${APIKey}&result_type=locality`
-        )
-        .then(response => {
-          const filterAddress = response.data.results[0]
-            ? response.data.results[0].formatted_address
-            : 'Unkown address';
-
-          dispatch({
-            type: STREAMS_TYPES.FETCH_FILTER_ADDRESS,
-            filterAddress
-          });
-        });
+      fetchFilterAddress(dispatch, map.lat, map.lng);
     };
   },
   setFilterAddress: filterAddress => {
